@@ -1,0 +1,32 @@
+{
+  "private": true,
+  "name": "mise-en.cene",
+  "version": "0.0.1",
+  "description": "A parser and compiler for conversations in the visual novel style.",
+  "homepage": "https://github.com/rocketnia/mise-en.cene",
+  "author": {
+    "name": "Ross Angle",
+    "url": "https://www.rocketnia.com/"
+  },
+  "engines": {
+    "node": ">= 0.6.0",
+    "npm": ">= 1.0.0"
+  },
+  "scripts": {
+    "cene": "cene",
+    "clean": "gulp clean",
+    "build": "gulp build"
+  },
+  "devDependencies": {
+    "cene": "0.0.37",
+    "cross-spawn": "^5.1.0",
+    "del": "^2.2.2",
+    "gulp": "^3.9.1",
+    "when": "^3.7.8"
+  },
+  "files": [
+    "/lib-cene/mise-en.cene",
+    "/LICENSE.txt",
+    "/README.md"
+  ]
+}

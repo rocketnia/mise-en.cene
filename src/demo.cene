@@ -1,0 +1,74 @@
+\= demo.cene (part of Mise-en.cene)
+\= Copyright 2017 Ross Angle. Released under the MIT License.
+
+
+\= This dialogue is derived from Rick and Rollo volume 18, a public
+\= domain comic obtained from these URLs:
+\=
+\= https://digitalcomicmuseum.com/preview/index.php?did=23823&page=15
+\= to
+\= https://digitalcomicmuseum.com/preview/index.php?did=23823&page=19
+
+\= TODO: Uncomment this once we've implemented the infrastructure to
+\= make it work.
+\;rm(defn conversation-main -
+
+/let rollo (tag/dexable (dex-string/nil) str.\;qq[rollo])
+/let greg (tag/dexable (dex-string/nil) str.\;qq[greg])
+/let rock (tag/dexable (dex-string/nil) str.\;qq[rock])
+/let sfx (tag/dexable (dex-string/nil) str.\;qq[sfx])
+/let title (tag/dexable (dex-string/nil) str.\;qq[title])
+
+/let sad (tag/dexable (dex-string/nil) str.\;qq[sad])
+/let happy (tag/dexable (dex-string/nil) str.\;qq[happy])
+/let distressed (tag/dexable (dex-string/nil) str.\;qq[distressed])
+/let shocked (tag/dexable (dex-string/nil) str.\;qq[shocked])
+
+/script-lines \;qq/
+
+
+rollo | Mother may disapprove if she finds you wearing all those gems,
+  Rock!
+rock | Aw, she won't mind!
+rock distressed | This is some load...
+rock distressed | All these imitation jewels are...
+rollo | Those jewels are...
+greg | Heh! Heh! Just a couple of brats!
+greg | You know what this is?
+rock shocked | Any stupe knows that's a gun!
+rock | You simply shouldn't point guns at people!
+sfx | WAK
+greg sad | Ouch!
+greg sad | It's only a play gun! Please let me have it back!
+rock distressed | I hate to see a crook blubber! Here's your gun!
+greg | As a matter of fact, this is a real gun! Hee!
+greg | That's mighty nice looking ice you're wearing! Let's have it!
+rock | Why sure... if you insist! You've got the gun!
+greg | You have any more?
+rock | Wait right here!
+greg | No, I'll come along!
+rollo | Mother won't like this!
+greg | Hand it [b all] over!
+rock | That's what I'm doing!
+greg distressed | H-hey that's about enough!
+rock | Oh, [b do] have some more!
+rock | You [b want] it all, you'll [b get] it all!
+sfx | CRASH
+rock | You're [b loaded]! Tee hee!
+rollo happy | I'll call the police!
+rock shocked | Tell them to bring an ambulance!
+police shocked | It's [b Greedy Greg], the jewel thief!
+rock | So I kept piling this imitation jewelry on him till he
+  collaped!
+police happy | Good work, girl! You'll be rewarded!
+rollo | Mother will be upset!
+rock distressed | She'd be more upset if they took all that imitation
+  jewelry!
+rollo | That's what I'm trying to tell you...
+rock shocked | What?
+rollo | That was [b real] jewelry! Worth [b millions]!
+rollo shocked | [b Real] jewelry? Gasp!
+sfx | PLOP!
+title | The [b End]
+
+)
