@@ -9,7 +9,7 @@ However, Mise-en.cene accomplishes none of this yet. In fact, it currently does 
 
 ## Using Mise-en.cene in your project
 
-Mise-en.cene is based on the Cene programming language, which isn't even very stable itself yet. Cene packages are distributed as Node.js packages using the `npm` command-line utility. Create your own Node.js project with a package.json and a Gulp and Cene build setup as seen in (the Cene example project)[https://github.com/era-platform/cene-scaffold], and then follow the below steps to incorporate Mise-en.cene into the project:
+Mise-en.cene is based on the Cene programming language, which isn't even very stable itself yet. Cene packages are distributed as Node.js packages using the `npm` command-line utility. Create your own Node.js project with a package.json and a Gulp and Cene build setup as seen in [the Cene example project](https://github.com/era-platform/cene-scaffold), and then follow the below steps to incorporate Mise-en.cene into the project:
 
 Install the specific version of Cene that Mise-en.cene has been tested with:
 
