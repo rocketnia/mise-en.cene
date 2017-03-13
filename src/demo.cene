@@ -2,6 +2,174 @@
 \= Copyright 2017 Ross Angle. Released under the MIT License.
 
 
+\= ===== DOM operations ==============================================
+\=
+\= TODO: Move these to Cene's js.cene.
+
+(defn dom-set-attribute el k maybe-v
+  (case maybe-v
+    
+    nil
+    (js-builder/fn client
+    /call-js-effects-2 client el string-to-javascript-utf-16.k
+      js.\;qq;yp[return function ( client, el, k ) {
+          el.setAttribute( k, null );
+          return client.done( client.wrap( null ) );
+      };])
+    
+    yep v
+    (js-builder/fn client
+    /call-js-effects-3 client el
+      string-to-javascript-utf-16.k
+      string-to-javascript-utf-16.v
+      js.\;qq;yp[return function ( client, el, k, v ) {
+          el.setAttribute( k, v );
+          return client.done( client.wrap( null ) );
+      };])
+    
+    err.\;qq[Expected a maybe-v that was a yep or a nil]))
+
+(defn domt-attr k maybe-v
+  (fn el
+    (dom-set-attribute el k maybe-v)))
+
+
+\= ===== Styleable documents =========================================
+
+\= The attributes are a list of arbitrary values, and the contents are
+\= an interpolated string of doc-node values.
+\=
+\= TODO: See if we can put the attributes into an orderless collection
+\= instead of a list. We might want it to be encapsulated to some
+\= extent as well, so that multiple processing passes can manipulate
+\= the same document without leaking details to each other.
+\=
+(def-struct doc-node attributes contents)
+
+
+\= ===== Using a styleable document to generate HTML =================
+
+(def-struct doc-attr-html-tag name)
+(def-struct doc-attr-html-attr k v)
+
+(defn domt-from-doc-node doc-node
+  (cast doc-node doc-node attributes contents
+    err.\;qq[Expected a doc-node that was a doc-node]
+  /let html-tags
+    (keep attributes /fn attribute /isa doc-attr-html-tag attribute)
+  /let html-attrs
+    (keep attributes /fn attribute /isa doc-attr-html-attr attribute)
+  /case
+    (any html-tags /fn html-tag
+      (cast html-tag doc-attr-html-tag name
+        err.\;qq[Internal error]
+      /any html-tags /fn html-tag-2
+        (cast html-tag-2 doc-attr-html-tag name-2
+          err.\;qq[Internal error]
+        /not/isa nil /string-metacompare name name-2)))
+    yep -
+    err.\;qq[Contradictory doc-attr-html-tag attributes found]
+  /case
+    (any html-attrs /fn html-attr
+      (cast html-attr doc-attr-html-attr k v
+        err.\;qq[Internal error]
+      /any html-attrs /fn html-attr-2
+        (cast html-attr-2 doc-attr-html-attr k2 v2
+          err.\;qq[Internal error]
+        /and (isa nil /string-metacompare k k2)
+        /not/isa nil /string-metacompare v v2)))
+    yep -
+    err.\;qq[Contradictory doc-attr-html-attr attributes found]
+  /let domt
+    (pass-to contents /fix/fn domt-from-contents contents
+      (case contents
+        
+        istring-cons prefix interpolation rest
+        (fn el
+          (dom-transform done-js-builder.el /list
+            (domt-child/dom-text prefix)
+            domt-from-doc-node.interpolation
+            (c domt-from-contents rest)))
+        
+        istring-nil suffix
+        (domt-child/dom-text suffix)
+        
+        err.\;qq[Expected a doc-node body that was an istring]))
+  /let domt
+    (fn el
+      (dom-transform done-js-builder.el /append
+        (map html-attrs /fn html-attr
+          (cast html-attr doc-attr-html-attr k v
+            err.\;qq[Internal error]
+          /domt-attr k /yep v))
+      /list domt))
+  /case html-tags cons html-tag -
+    (cast html-tag doc-attr-html-tag name
+      err.\;qq[Internal error]
+    /domt-child/dom-transform dom-tag.name /list domt)
+    domt))
+
+
+\= ===== Build artifact: The demo's JavaScript behavior ==============
+
+(defn js-client-main client
+  (then-js-effects
+    (run-give-unwrapped-js-effects client
+      js.\;qq;yp[return function ( client ) {
+          var document = client.getTopLevelVar( "document" );
+          return client.done( client.wrap( document.body ) );
+      };])
+    /fn body
+  /run-js-builder client
+  /dom-transform done-js-builder.body /list
+  /domt-from-doc-node/doc-node (list /doc-attr-html-tag str.ul)
+  /istring-cons str.\;qq[]
+    (doc-node (list /doc-attr-html-tag str.li)
+    /istring-nil str.\;qq[Hello])
+  /istring-cons str.\;qq[]
+    (doc-node (list /doc-attr-html-tag str.li)
+    /istring-nil str.\;qq[World])
+  /istring-nil str.\;qq[]))
+
+(def-macro build-client
+  home-scope caller-scope my-stx-details args then
+  
+  (basic-nil-macro home-scope caller-scope my-stx-details then
+  /fn caller-scope s mac
+  /get-mode/fn mode
+  /join-effects
+    (make-js-program mode home-scope
+      (output-path-get
+        (output-path-get cli-output-directory.mode str.\;qq[static])
+        str.\;qq[client.js])
+      str.js-client-main
+    /list str.document)
+  /no-effects/nil))
+
+(build-client)
+
+
+\= ===== Build artifact: Raw assets the demo uses ====================
+
+(def-macro build-raw-assets
+  home-scope caller-scope my-stx-details args then
+  
+  (basic-nil-macro home-scope caller-scope my-stx-details then
+  /fn caller-scope s mac
+  /get-mode/fn mode
+  /join-effects
+    (copy-paths mode
+      (input-path-get
+        (input-path-get cli-input-directory.mode str.src)
+        str.raw)
+      cli-output-directory.mode)
+  /no-effects/nil))
+
+(build-raw-assets)
+
+
+\= ===== Notes detailing the desired screenplay syntax ===============
+
 \= This dialogue is derived from Rick and Rollo volume 18, a public
 \= domain comic obtained from these URLs:
 \=
@@ -24,7 +192,7 @@
 /let distressed (tag/dexable (dex-string/nil) str.\;qq[distressed])
 /let shocked (tag/dexable (dex-string/nil) str.\;qq[shocked])
 
-/script-lines \;qq/
+/script-lines \;qq;yp/
 
 
 rollo | Mother may disapprove if she finds you wearing all those gems,

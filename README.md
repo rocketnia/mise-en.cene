@@ -4,7 +4,7 @@ The Mise-en.cene (MEEZ-ah-SEEN) project is meant to make it easy to take a scree
 
 Mise-en.cene will put to the test some experimental ideas about how to replace CSS (and HTML) while meeting its goals of decoration, customization, and accessibility. The results could be generally applicable to other document types and presentation media.
 
-However, Mise-en.cene accomplishes none of this yet. In fact, it currently does nothing. This is just a shell of a project for now.
+However, Mise-en.cene accomplishes none of this yet. This project is in a "hello world" phase.
 
 
 ## Using Mise-en.cene in your project
@@ -52,6 +52,12 @@ Install its development dependendencies:
 npm install
 ```
 
+You may also like to install Gulp globally so you can run the static file server:
+
+```
+npm install -g gulp
+```
+
 To run a build:
 
 ```
@@ -64,6 +70,18 @@ To delete the build/ and fin/ directories:
 
 ```
 npm run clean
+```
+
+To run the static file server on port 8080:
+
+```
+gulp serve
+```
+
+To run a build and run the static file server on port 8080, concurrently:
+
+```
+gulp build serve
 ```
 
 

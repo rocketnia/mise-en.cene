@@ -1,10 +1,19 @@
+var $path = require( "path" );
+
+var del = require( "del" );
+var express = require( "express" );
 var gulp = require( "gulp" );
+var spawn = require( "cross-spawn" );
 var when = require( "when" );
 
-var spawn = require( "cross-spawn" );
-var del = require( "del" );
-
 var packageJson = require( "./package.json" );
+
+
+var ceneLibs = [
+    "cene",
+    "mise-en.cene"
+];
+var port = 8080;
 
 
 var ownLib = packageJson.name;
@@ -12,10 +21,6 @@ var ownLib = packageJson.name;
 if ( !/^[a-z\-.]*$/.test( ownLib ) )
     throw new Error();
 
-var ceneLibs = [
-    "cene",
-    "mise-en.cene"
-];
 
 gulp.task( "clean", function () {
     return del( [ "build", "fin" ] );
@@ -48,5 +53,15 @@ gulp.task( "build", function () {
                 resolve( null );
             } );
         } );
+    } );
+} );
+
+gulp.task( "serve", function ( then ) {
+    var app = express();
+    app.use(
+        express.static( $path.resolve( __dirname, "fin/static" ) ) );
+    app.listen( port, function () {
+        console.log(
+            "Serving fin/static/ at http://localhost:" + port + "/" );
     } );
 } );

@@ -18,9 +18,10 @@
     "build": "gulp build"
   },
   "devDependencies": {
-    "cene": "0.0.37",
+    "cene": "0.0.39",
     "cross-spawn": "^5.1.0",
     "del": "^2.2.2",
+    "express": "^4.15.2",
     "gulp": "^3.9.1",
     "when": "^3.7.8"
   },
