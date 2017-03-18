@@ -110,6 +110,65 @@
     domt))
 
 
+\= ===== Convenient markup syntax for styleable documents ============
+
+\= TODO: Use something like this to split the lines for `convo-lines`.
+\;rm(defn chops-split-and-trim-later istring then
+  (istring-split-later istring (regex-from-string str.\;qq[|])
+  /fn istrings
+  /map-later istrings (chops-trim-later) then))
+
+(defn run-chopsrun-convo chopsrun
+  (cast chopsrun free-chopsrun chopsrun
+    err.\;qq[Expected a chopsrun that was a free-chopsrun]
+  /c chopsrun /chopsrun-ops
+    
+    \= from-string
+    (fn string
+      (doc-node (list) /istring-nil string))
+    
+    \= from-interpolation
+    (fn interpolation interpolation)
+    
+    \= join
+    (fn a b
+      (doc-node (list)
+      /istring-cons str.\;qq[] a
+      /istring-cons str.\;qq[] b
+      /istring-nil str.\;qq[]))))
+
+(defn convo-b body
+  (doc-node (list /doc-attr-html-tag str.b)
+  /istring-cons str.\;qq[] body
+  /istring-nil str.\;qq[]))
+
+(def-chops-macro b home-scope caller-scope my-stx-details chops then
+  (basic-macro home-scope caller-scope my-stx-details then
+  /fn caller-scope s mac then
+  /compile-convo-chops-to-expr-later s mac caller-scope chops
+  /fn chops
+  /get-mode/fn mode /c then /let mac (c mac mode)
+  /c mac str.chopsrun-from-nonfree /list
+  /c mac str.convo-b /list chops))
+
+(defn compile-convo-chops-to-expr-later s mac scope chops then
+  (compile-chops-to-expr-later s mac scope chops /fn chops
+  /get-mode/fn mode /c then /let mac (c mac mode)
+  /c mac str.run-chopsrun-convo /list chops))
+
+(def-macro convo-span
+  home-scope caller-scope my-stx-details args then
+  
+  (cast args cons istring args
+    err.\;qq[Called convo-span with fewer than one argument]
+  /cast args nil
+    err.\;qq[Called convo-span with more than one argument]
+  /parse-located-chops-force-later istring /fn chops
+  /basic-macro home-scope caller-scope my-stx-details then
+  /fn caller-scope s mac then
+  /compile-convo-chops-to-expr-later s mac caller-scope chops then))
+
+
 \= ===== Build artifact: The demo's JavaScript behavior ==============
 
 (defn js-client-main client
@@ -125,10 +184,12 @@
   /domt-from-doc-node/doc-node (list /doc-attr-html-tag str.ul)
   /istring-cons str.\;qq[]
     (doc-node (list /doc-attr-html-tag str.li)
-    /istring-nil str.\;qq[Hello])
+    /istring-cons str.\;qq[]
+      convo-span.\;qq[Hello, [b bold text].]
+    /istring-nil str.\;qq[])
   /istring-cons str.\;qq[]
     (doc-node (list /doc-attr-html-tag str.li)
-    /istring-nil str.\;qq[World])
+    /istring-nil str.\;qq[Hello, world.])
   /istring-nil str.\;qq[]))
 
 (def-macro build-client
@@ -192,7 +253,7 @@
 /let distressed (tag/dexable (dex-string/nil) str.\;qq[distressed])
 /let shocked (tag/dexable (dex-string/nil) str.\;qq[shocked])
 
-/script-lines \;qq;yp/
+/convo-lines \;qq;yp/
 
 
 rollo | Mother may disapprove if she finds you wearing all those gems,
