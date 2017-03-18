@@ -9,7 +9,7 @@
     "url": "https://www.rocketnia.com/"
   },
   "engines": {
-    "node": ">= 0.6.0",
+    "node": ">= 3.3.1",
     "npm": ">= 1.0.0"
   },
   "scripts": {
