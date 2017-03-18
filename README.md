@@ -8,6 +8,8 @@ Mise-en.cene will put to the test some experimental ideas about how to replace C
 
 However, Mise-en.cene accomplishes barely any of this yet. Right now it takes a simple screenplay syntax and compiles it to JavaScript code that generates an HTML list to show the dialogue.
 
+The demo in this repo builds to a [page you can see in your browser](https://rocketnia.github.io/mise-en.cene/fin/static/).
+
 
 ## Using Mise-en.cene in your project
 
