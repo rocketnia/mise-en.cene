@@ -22,10 +22,13 @@
           return client.done( client.wrap( document.body ) );
       };])
     /fn body
-  /run-js-builder client
-  /dom-transform done-js-builder.body /list
   \= TODO: Move the definition of `convo-main` above this use site.
-  /domt-from-doc-node/convo-list/convo-main/nil))
+  /let doc (convo-list/convo-main/nil)
+  /later-js-effects/fn js-effects-definer
+  /html-data-from-convo-tags-later doc /fn doc
+  /definer-define js-effects-definer (dex-give-up/nil)
+  /run-js-builder client
+  /dom-transform done-js-builder.body /list/domt-from-doc-node doc))
 
 (def-macro build-client
   home-scope caller-scope my-stx-details args then
@@ -64,7 +67,7 @@
 (build-raw-assets)
 
 
-\= ===== Notes detailing the desired screenplay syntax ===============
+\= ===== Demo screenplay =============================================
 
 \= This dialogue is derived from Rick and Rollo volume 18, a public
 \= domain comic obtained from these URLs:
@@ -73,23 +76,20 @@
 \= to
 \= https://digitalcomicmuseum.com/preview/index.php?did=23823&page=19
 
-\= TODO: Really implement this, or at least implement a better
-\= alternative.
-(defn tag x x)
-
 (defn convo-main -
 
-/let rollo (tag/dexable (dex-string/nil) str.\;qq[rollo])
-/let greg (tag/dexable (dex-string/nil) str.\;qq[greg])
-/let rock (tag/dexable (dex-string/nil) str.\;qq[rock])
-/let sfx (tag/dexable (dex-string/nil) str.\;qq[sfx])
-/let title (tag/dexable (dex-string/nil) str.\;qq[title])
-/let police (tag/dexable (dex-string/nil) str.\;qq[police])
+/let rollo (convo-tag str.rollo)
+/let greg (convo-tag str.greg)
+/let rock (convo-tag str.rock)
+/let police (convo-tag str.police)
 
-/let sad (tag/dexable (dex-string/nil) str.\;qq[sad])
-/let happy (tag/dexable (dex-string/nil) str.\;qq[happy])
-/let distressed (tag/dexable (dex-string/nil) str.\;qq[distressed])
-/let shocked (tag/dexable (dex-string/nil) str.\;qq[shocked])
+/let sfx (convo-tag str.sfx)
+/let title (convo-tag str.title)
+
+/let sad (convo-tag str.sad)
+/let happy (convo-tag str.happy)
+/let distressed (convo-tag str.distressed)
+/let shocked (convo-tag str.shocked)
 
 /convo-lines \;qq;yp/
 

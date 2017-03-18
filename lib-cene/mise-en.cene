@@ -2,6 +2,19 @@
 \= Copyright 2017 Ross Angle. Released under the MIT License.
 
 
+\= ===== Miscellaneous utilities =====================================
+\=
+\= TODO: Move these to Cene's prelude-util.cene.
+
+(defn mappend-later list func then
+  (foldl-later (nil) list
+    (fn state elem then
+      (c func elem /fn func-result
+      /c-later then /rev-append func-result state))
+  /fn rev-result
+  /c-later then rev.rev-result))
+
+
 \= ===== Strings =====================================================
 \=
 \= TODO: Move these to Cene's string.cene.
@@ -239,3 +252,17 @@
   /fn lines
   /get-mode/fn mode /c then /let mac (c mac mode)
   /c mac str.list lines))
+
+(def-struct convo-tag tag-string)
+
+(defn html-data-from-convo-tags-later doc then
+  (cast doc doc-node attrs body
+    err.\;qq[Expected a doc that was a doc-node]
+  /mappend-later attrs
+    (fn attr then
+      (cast attr convo-tag tag-string (c then /list attr)
+      /string-append-later str.data-convo- tag-string /fn html-attr
+      /c then /list attr /doc-attr-html-attr html-attr str.\;qq[]))
+  /fn attrs
+  /istring-map-later body (html-data-from-convo-tags-later) /fn body
+  /c then /doc-node attrs body))
