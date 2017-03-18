@@ -7,9 +7,7 @@
 (defn convo-list list
   (doc-node (list /doc-attr-html-tag str.ul)
   /istring-from-list/map list /fn item
-    (doc-node (list /doc-attr-html-tag str.li)
-    /istring-cons str.\;qq[] item
-    /istring-nil str.\;qq[])))
+    (doc-node (list /doc-attr-html-tag str.li) /istring-done item)))
 
 
 \= ===== Build artifact: The demo's JavaScript behavior ==============
