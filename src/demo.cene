@@ -2,6 +2,27 @@
 \= Copyright 2017 Ross Angle. Released under the MIT License.
 
 
+\= ===== Miscellaneous utilities =====================================
+
+(defn istring-from-list list
+  (case list
+    
+    nil
+    (istring-nil str.\;qq[])
+    
+    cons first rest
+    (istring-cons str.\;qq[] first /istring-from-list rest)
+    
+    err.\;qq[Expected a list that was a nil or a cons]))
+
+(defn convo-list list
+  (doc-node (list /doc-attr-html-tag str.ul)
+  /istring-from-list/map list /fn item
+    (doc-node (list /doc-attr-html-tag str.li)
+    /istring-cons str.\;qq[] item
+    /istring-nil str.\;qq[])))
+
+
 \= ===== Build artifact: The demo's JavaScript behavior ==============
 
 (defn js-client-main client
@@ -14,16 +35,8 @@
     /fn body
   /run-js-builder client
   /dom-transform done-js-builder.body /list
-  /domt-from-doc-node/doc-node (list /doc-attr-html-tag str.ul)
-  /istring-cons str.\;qq[]
-    (doc-node (list /doc-attr-html-tag str.li)
-    /istring-cons str.\;qq[]
-      convo-span.\;qq[Hello, [b bold text].]
-    /istring-nil str.\;qq[])
-  /istring-cons str.\;qq[]
-    (doc-node (list /doc-attr-html-tag str.li)
-    /istring-nil str.\;qq[Hello, world.])
-  /istring-nil str.\;qq[]))
+  \= TODO: Move the definition of `convo-main` above this use site.
+  /domt-from-doc-node/convo-list/convo-main/nil))
 
 (def-macro build-client
   home-scope caller-scope my-stx-details args then
@@ -71,9 +84,11 @@
 \= to
 \= https://digitalcomicmuseum.com/preview/index.php?did=23823&page=19
 
-\= TODO: Uncomment this once we've implemented the infrastructure to
-\= make it work.
-\;rm(defn conversation-main -
+\= TODO: Really implement this, or at least implement a better
+\= alternative.
+(defn tag x x)
+
+(defn convo-main -
 
 /let rollo (tag/dexable (dex-string/nil) str.\;qq[rollo])
 /let greg (tag/dexable (dex-string/nil) str.\;qq[greg])
@@ -89,8 +104,16 @@
 /convo-lines \;qq;yp/
 
 
-rollo | Mother may disapprove if she finds you wearing all those gems,
-  Rock!
+\= TODO: Implement some way to allow us to wrap long lines like this
+\= one. A good solution would be to implement ;in syntax in the Cene
+\= reader. A much prettier solution would be for `convo-lines` to look
+\= for lines without | and combine them with the previous lines, with
+\= a space in between. Maybe we could redesign the `convo-lines`
+\= syntax to have a delimiter between lines, so that we don't need
+\= whitespace preservation in the first place.
+\=
+rollo | Mother may disapprove if she finds you wearing all those gems, Rock!
+
 rock | Aw, she won't mind!
 rock distressed | This is some load...
 rock distressed | All these imitation jewels are...
@@ -120,12 +143,10 @@ rock | You're [b loaded]! Tee hee!
 rollo happy | I'll call the police!
 rock shocked | Tell them to bring an ambulance!
 police shocked | It's [b Greedy Greg], the jewel thief!
-rock | So I kept piling this imitation jewelry on him till he
-  collaped!
+rock | So I kept piling this imitation jewelry on him till he collaped!
 police happy | Good work, girl! You'll be rewarded!
 rollo | Mother will be upset!
-rock distressed | She'd be more upset if they took all that imitation
-  jewelry!
+rock distressed | She'd be more upset if they took all that imitation jewelry!
 rollo | That's what I'm trying to tell you...
 rock shocked | What?
 rollo | That was [b real] jewelry! Worth [b millions]!

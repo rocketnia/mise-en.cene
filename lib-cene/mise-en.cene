@@ -2,6 +2,15 @@
 \= Copyright 2017 Ross Angle. Released under the MIT License.
 
 
+\= ===== Strings =====================================================
+\=
+\= TODO: Move these to Cene's string.cene.
+
+(defn istring-is-empty istring
+  (cast istring istring-nil string (nope/nil)
+  /isa nil /string-metacompare str.\;qq[] string))
+
+
 \= ===== DOM operations ==============================================
 \=
 \= TODO: Move these to Cene's js.cene.
@@ -112,12 +121,6 @@
 
 \= ===== Convenient markup syntax for styleable documents ============
 
-\= TODO: Use something like this to split the lines for `convo-lines`.
-\;rm(defn chops-split-and-trim-later istring then
-  (istring-split-later istring (regex-from-string str.\;qq[|])
-  /fn istrings
-  /map-later istrings (chops-trim-later) then))
-
 (defn run-chopsrun-convo chopsrun
   (cast chopsrun free-chopsrun chopsrun
     err.\;qq[Expected a chopsrun that was a free-chopsrun]
@@ -156,9 +159,7 @@
   /get-mode/fn mode /c then /let mac (c mac mode)
   /c mac str.run-chopsrun-convo /list chops))
 
-(def-macro convo-span
-  home-scope caller-scope my-stx-details args then
-  
+(def-macro convo-span home-scope caller-scope my-stx-details args then
   (cast args cons istring args
     err.\;qq[Called convo-span with fewer than one argument]
   /cast args nil
@@ -167,3 +168,47 @@
   /basic-macro home-scope caller-scope my-stx-details then
   /fn caller-scope s mac then
   /compile-convo-chops-to-expr-later s mac caller-scope chops then))
+
+(def-macro convo-lines
+  home-scope caller-scope my-stx-details args then
+  
+  (cast args cons istring args
+    err.\;qq[Called convo-lines with fewer than one argument]
+  /cast args nil
+    err.\;qq[Called convo-lines with more than one argument]
+  \= TODO: Stop using `from-located` and `to-located` here.
+  /parse-located-chops-force-later istring /fn chops
+  /istring-split-later from-located.chops
+    (regex-from-string str.\;qq[\n])
+  /fn lines
+  /map-later lines (chops-trim-later) /fn lines
+  /let lines (keep lines /fn line /not/istring-is-empty line)
+  /basic-macro home-scope caller-scope my-stx-details then
+  /fn caller-scope s mac then
+  /scope-spread-later caller-scope lines
+    (fn scope line then
+      (istring-split-later line (regex-from-string str.\;qq[|])
+      /fn parts
+      /cast parts cons tags rest
+        err.\;qq[Internal error]
+      /cast rest cons body rest
+        err.\;qq[Encountered a nonempty convo-lines line without a |]
+      /cast rest nil
+        err.\;qq[Encountered a convo-lines line with more than one |]
+      
+      \= TODO: Support tags. Right now, we just ignore all the text
+      \= that would specify the tags. This code at least would verify
+      \= that the text was empty before ignoring it.
+      \=
+\=      /chops-trim-later tags /fn tags
+\=      /cast istring-is-empty.tags yep -
+\=        err.\;qq[
+\=          Encountered a convo-lines line with tags, which are not
+\=          supported yet]
+      
+      /chops-trim-later body /fn body
+      /compile-convo-chops-to-expr-later s mac scope to-located.body
+        then))
+  /fn lines
+  /get-mode/fn mode /c then /let mac (c mac mode)
+  /c mac str.list lines))

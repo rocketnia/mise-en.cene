@@ -2,9 +2,9 @@
 
 The Mise-en.cene (MEEZ-ah-SEEN) project is meant to make it easy to take a screenplay-like dialogue between characters and have it compiled to multiple display styles for high accessibility. In particular, it's intended to let conversations be displayed in a visual novel style with character art and background images, but with fallbacks to comic or screenplay formats when those are more accessible to the reader.
 
-Mise-en.cene will put to the test some experimental ideas about how to replace CSS (and HTML) while meeting its goals of decoration, customization, and accessibility. The results could be generally applicable to other document types and presentation media.
+Mise-en.cene will put to the test some experimental ideas about how to replace CSS (and HTML) while meeting CSS's goals of decoration, customization, and accessibility. The results could be generally applicable to other document types and presentation media.
 
-However, Mise-en.cene accomplishes none of this yet. This project is in a "hello world" phase.
+However, Mise-en.cene accomplishes barely any of this yet. Right now it takes a simple screenplay syntax and compiles it to JavaScript code that generates an HTML list to show the dialogue.
 
 
 ## Using Mise-en.cene in your project
