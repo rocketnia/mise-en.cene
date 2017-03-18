@@ -4,17 +4,6 @@
 
 \= ===== Miscellaneous utilities =====================================
 
-(defn istring-from-list list
-  (case list
-    
-    nil
-    (istring-nil str.\;qq[])
-    
-    cons first rest
-    (istring-cons str.\;qq[] first /istring-from-list rest)
-    
-    err.\;qq[Expected a list that was a nil or a cons]))
-
 (defn convo-list list
   (doc-node (list /doc-attr-html-tag str.ul)
   /istring-from-list/map list /fn item
@@ -95,6 +84,7 @@
 /let rock (tag/dexable (dex-string/nil) str.\;qq[rock])
 /let sfx (tag/dexable (dex-string/nil) str.\;qq[sfx])
 /let title (tag/dexable (dex-string/nil) str.\;qq[title])
+/let police (tag/dexable (dex-string/nil) str.\;qq[police])
 
 /let sad (tag/dexable (dex-string/nil) str.\;qq[sad])
 /let happy (tag/dexable (dex-string/nil) str.\;qq[happy])

@@ -6,9 +6,26 @@
 \=
 \= TODO: Move these to Cene's string.cene.
 
+(defn string-is-empty string
+  (isa nil /string-metacompare str.\;qq[] string))
+
 (defn istring-is-empty istring
   (cast istring istring-nil string (nope/nil)
-  /isa nil /string-metacompare str.\;qq[] string))
+  /string-is-empty string))
+
+(defn istring-from-list list
+  (case list
+    
+    nil
+    (istring-nil str.\;qq[])
+    
+    cons first rest
+    (istring-cons str.\;qq[] first /istring-from-list rest)
+    
+    err.\;qq[Expected a list that was a nil or a cons]))
+
+(defn istring-done interpolation
+  (istring-from-list/list interpolation))
 
 
 \= ===== DOM operations ==============================================
@@ -127,23 +144,16 @@
   /c chopsrun /chopsrun-ops
     
     \= from-string
-    (fn string
-      (doc-node (list) /istring-nil string))
+    (fn string /doc-node (list) /istring-nil string)
     
     \= from-interpolation
     (fn interpolation interpolation)
     
     \= join
-    (fn a b
-      (doc-node (list)
-      /istring-cons str.\;qq[] a
-      /istring-cons str.\;qq[] b
-      /istring-nil str.\;qq[]))))
+    (fn a b /doc-node (list) /istring-from-list/list a b)))
 
 (defn convo-b body
-  (doc-node (list /doc-attr-html-tag str.b)
-  /istring-cons str.\;qq[] body
-  /istring-nil str.\;qq[]))
+  (doc-node (list /doc-attr-html-tag str.b) /istring-done body))
 
 (def-chops-macro b home-scope caller-scope my-stx-details chops then
   (basic-macro home-scope caller-scope my-stx-details then
@@ -176,13 +186,16 @@
     err.\;qq[Called convo-lines with fewer than one argument]
   /cast args nil
     err.\;qq[Called convo-lines with more than one argument]
-  \= TODO: Stop using `from-located` and `to-located` here.
   /parse-located-chops-force-later istring /fn chops
-  /istring-split-later from-located.chops
+  /let istring-split-trim-and-remove-empty
+    (fn istring regex then
+      (istring-split-later istring regex /fn list
+      /map-later list (chops-trim-later) /fn list
+      /c then /keep list /fn item /not/istring-is-empty item))
+  \= TODO: Stop using `from-located` and `to-located` here.
+  /c istring-split-trim-and-remove-empty from-located.chops
     (regex-from-string str.\;qq[\n])
   /fn lines
-  /map-later lines (chops-trim-later) /fn lines
-  /let lines (keep lines /fn line /not/istring-is-empty line)
   /basic-macro home-scope caller-scope my-stx-details then
   /fn caller-scope s mac then
   /scope-spread-later caller-scope lines
@@ -195,20 +208,34 @@
         err.\;qq[Encountered a nonempty convo-lines line without a |]
       /cast rest nil
         err.\;qq[Encountered a convo-lines line with more than one |]
-      
-      \= TODO: Support tags. Right now, we just ignore all the text
-      \= that would specify the tags. This code at least would verify
-      \= that the text was empty before ignoring it.
-      \=
-\=      /chops-trim-later tags /fn tags
-\=      /cast istring-is-empty.tags yep -
-\=        err.\;qq[
-\=          Encountered a convo-lines line with tags, which are not
-\=          supported yet]
-      
+      /c istring-split-trim-and-remove-empty tags
+        (regex-one-in-string str.\;qq[\s`\t`\r`\n])
+      /fn tags
+      /let tags
+        (map tags /fn tag
+          
+          \= The tag can be a symbol or an interpolation of an
+          \= expression.
+          \=
+          (case tag istring-nil - (c s tag)
+          /cast tag istring-cons prefix interpolation rest
+            err.\;qq[Internal error]
+          /let call-err
+            (fn -
+              err.\;qq[
+                Encountered a convo-lines line with a tag that wasn't
+                a symbol or an interpolation])
+          /cast rest istring-nil suffix (c call-err /nil)
+          /cast string-is-empty.prefix yep - (c call-err /nil)
+          /cast string-is-empty.suffix yep - (c call-err /nil)
+          /cast interpolation foreign expr (c call-err /nil)
+            expr))
       /chops-trim-later body /fn body
       /compile-convo-chops-to-expr-later s mac scope to-located.body
-        then))
+      /fn expr
+      /get-mode/fn mode /c then /let mac (c mac mode)
+      /c mac str.doc-node /list (c mac str.list tags)
+      /c mac str.istring-done /list expr))
   /fn lines
   /get-mode/fn mode /c then /let mac (c mac mode)
   /c mac str.list lines))
