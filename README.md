@@ -66,6 +66,12 @@ npm run build
 
 This creates intermediate files in a new build/ directory and generates demo files in a new fin/ directory. The Cene source code for the demos is obtained from the src/ directory. By editing the src/ directory, you can maintain the demos, and by editing the lib-cene/ directory, you can maintain the library itself.
 
+Alternatively, to run a build without minifying the resulting JavaScript files:
+
+```
+npm run build-debug
+```
+
 To delete the build/ and fin/ directories:
 
 ```

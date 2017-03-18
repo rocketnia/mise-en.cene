@@ -3,6 +3,7 @@ var $path = require( "path" );
 var del = require( "del" );
 var express = require( "express" );
 var gulp = require( "gulp" );
+var _ = require( "lodash" );
 var spawn = require( "cross-spawn" );
 var when = require( "when" );
 
@@ -22,11 +23,15 @@ if ( !/^[a-z\-.]*$/.test( ownLib ) )
     throw new Error();
 
 
-gulp.task( "clean", function () {
-    return del( [ "build", "fin" ] );
-} );
-
-gulp.task( "build", function () {
+function build( opt_options ) {
+    var options = _.defaults( {}, opt_options, {
+        minify: true
+    } );
+    
+    var npmCommand = "run cene -- build.cene -i build/ -o fin/";
+    if ( options.minify )
+        npmCommand += " -m";
+    
     return when.all( [
         gulp.src( "src/**/*" ).pipe( gulp.dest( "build/src" ) ),
         gulp.src( "lib-cene/**/*" ).pipe(
@@ -39,10 +44,7 @@ gulp.task( "build", function () {
         } )
     ) ).then( function ( ignored ) {
         return when.promise( function ( resolve, reject ) {
-            spawn( "npm",
-                "run cene -- build.cene -i build/ -o fin/ -m".split(
-                    " " ),
-            {
+            spawn( "npm", npmCommand.split( " " ), {
                 stdio: [ "ignore", "inherit", "inherit" ]
             } ).on( "close", function ( code ) {
                 if ( code !== 0 )
@@ -53,6 +55,20 @@ gulp.task( "build", function () {
                 resolve( null );
             } );
         } );
+    } );
+}
+
+gulp.task( "clean", function () {
+    return del( [ "build", "fin" ] );
+} );
+
+gulp.task( "build", function () {
+    return build();
+} );
+
+gulp.task( "build-debug", function () {
+    return build( {
+        minify: false
     } );
 } );
 

@@ -15,7 +15,8 @@
   "scripts": {
     "cene": "cene",
     "clean": "gulp clean",
-    "build": "gulp build"
+    "build": "gulp build",
+    "build-debug": "gulp build-debug"
   },
   "devDependencies": {
     "cene": "0.0.39",
@@ -23,6 +24,7 @@
     "del": "^2.2.2",
     "express": "^4.15.2",
     "gulp": "^3.9.1",
+    "lodash": "^4.17.4",
     "when": "^3.7.8"
   },
   "files": [
