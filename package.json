@@ -19,7 +19,7 @@
     "build-debug": "gulp build-debug"
   },
   "devDependencies": {
-    "cene": "0.0.39",
+    "cene": "0.0.42",
     "cross-spawn": "^5.1.0",
     "del": "^2.2.2",
     "express": "^4.15.2",
