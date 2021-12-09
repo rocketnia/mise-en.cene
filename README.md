@@ -1,6 +1,7 @@
 # Mise-en.cene
 
-[![Travis build](https://travis-ci.org/rocketnia/mise-en.cene.svg?branch=main)](https://travis-ci.org/rocketnia/mise-en.cene)
+[![CI](https://github.com/rocketnia/mise-en.cene/actions/workflows/ci.yml/badge.svg)](https://github.com/rocketnia/mise-en.cene/actions/workflows/ci.yml)
+
 
 The Mise-en.cene (MEEZ-ah-SEEN) project is meant to make it easy to take a screenplay-like dialogue between characters and have it compiled to multiple display styles for high accessibility. In particular, it's intended to let conversations be displayed in a visual novel style with character art and background images, but with fallbacks to comic or screenplay formats when those are more accessible to the reader.
 

@@ -18,6 +18,7 @@
     "clean": "gulp clean",
     "build": "gulp build",
     "build-debug": "gulp build-debug",
+    "build-gh-pages": "npm run build",
     "test": "echo 'No tests. Use `npm run build` to verify that the build works.'"
   },
   "devDependencies": {
