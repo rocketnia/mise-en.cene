@@ -8,7 +8,7 @@ Mise-en.cene will put to the test some experimental ideas about how to replace C
 
 However, Mise-en.cene accomplishes barely any of this yet. Right now it takes a simple screenplay syntax and compiles it to JavaScript code that generates an HTML list to show the dialogue.
 
-The demo in this repo builds to a [page you can see in your browser](https://rocketnia.github.io/mise-en.cene/fin/static/).
+The demo in this repo builds to a [page you can see in your browser](https://rocketnia.github.io/mise-en.cene/demo/).
 
 
 ## Using Mise-en.cene in your project
@@ -56,19 +56,13 @@ Install its development dependendencies:
 npm install
 ```
 
-You may also like to install Gulp globally so you can run the static file server:
-
-```
-npm install -g gulp
-```
-
 To run a build:
 
 ```
 npm run build
 ```
 
-This creates intermediate files in a new build/ directory and generates demo files in a new fin/ directory. The Cene source code for the demos is obtained from the src/ directory. By editing the src/ directory, you can maintain the demos, and by editing the lib-cene/ directory, you can maintain the library itself.
+This creates intermediate files in a new build/ directory and generates demo files in a new dist/ directory. The Cene source code for the demos is obtained from the src/ directory. By editing the src/ directory, you can maintain the demos, and by editing the lib-cene/ directory, you can maintain the library itself.
 
 Alternatively, to run a build without minifying the resulting JavaScript files:
 
@@ -76,7 +70,7 @@ Alternatively, to run a build without minifying the resulting JavaScript files:
 npm run build-debug
 ```
 
-To delete the build/ and fin/ directories:
+To delete the build/ and dist/ directories:
 
 ```
 npm run clean
@@ -85,13 +79,13 @@ npm run clean
 To run the static file server on port 8080:
 
 ```
-gulp serve
+npm run gulp serve
 ```
 
 To run a build and run the static file server on port 8080, concurrently:
 
 ```
-gulp build serve
+npm run gulp build serve
 ```
 
 

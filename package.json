@@ -14,9 +14,11 @@
   },
   "scripts": {
     "cene": "cene",
+    "gulp": "gulp",
     "clean": "gulp clean",
     "build": "gulp build",
-    "build-debug": "gulp build-debug"
+    "build-debug": "gulp build-debug",
+    "test": "echo 'No tests. Use `npm run build` to verify that the build works.'"
   },
   "devDependencies": {
     "cene": "0.0.44",

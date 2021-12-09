@@ -28,7 +28,7 @@ function build( opt_options ) {
         minify: true
     } );
     
-    var npmCommand = "run cene -- build.cene -i build/ -o fin/";
+    var npmCommand = "run cene -- build.cene -i build/ -o dist/";
     if ( options.minify )
         npmCommand += " -m";
     
@@ -52,14 +52,16 @@ function build( opt_options ) {
                         new Error(
                             "Cene exited with code " + code ) );
                 
-                resolve( null );
+                resolve(
+                    gulp.src( "dist/demo/**/*" ).pipe(
+                        gulp.dest( "dist/gh-pages/demo" ) ) );
             } );
         } );
     } );
 }
 
 gulp.task( "clean", function () {
-    return del( [ "build", "fin" ] );
+    return del( [ "build", "dist" ] );
 } );
 
 gulp.task( "build", function () {
@@ -75,9 +77,9 @@ gulp.task( "build-debug", function () {
 gulp.task( "serve", function ( then ) {
     var app = express();
     app.use(
-        express.static( $path.resolve( __dirname, "fin/static" ) ) );
+        express.static( $path.resolve( __dirname, "dist/demo" ) ) );
     app.listen( port, function () {
         console.log(
-            "Serving fin/static/ at http://localhost:" + port + "/" );
+            "Serving dist/demo/ at http://localhost:" + port + "/" );
     } );
 } );
