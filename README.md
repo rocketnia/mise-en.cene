@@ -18,19 +18,19 @@ Mise-en.cene is based on the Cene programming language, which isn't even very st
 
 Install the specific version of Cene that Mise-en.cene has been tested with:
 
-```
-npm install --save cene@0.0.37
+```bash
+npm install --save cene@0.0.44
 ```
 
 Install Mise-en.cene itself:
 
-```
+```bash
 npm install --save mise-en.cene
 ```
 
 Ensure `"cene"` and `"mise-en.cene"` appear in your gulpfile.js's `ceneLibs` array exactly once, like so:
 
-```
+```js
 var ceneLibs = [
     "cene",
     "mise-en.cene"
@@ -53,13 +53,13 @@ First, check out this repo.
 
 Install its development dependendencies:
 
-```
+```bash
 npm install
 ```
 
 To run a build:
 
-```
+```bash
 npm run build
 ```
 
@@ -67,25 +67,25 @@ This creates intermediate files in a new build/ directory and generates demo fil
 
 Alternatively, to run a build without minifying the resulting JavaScript files:
 
-```
+```bash
 npm run build-debug
 ```
 
 To delete the build/ and dist/ directories:
 
-```
+```bash
 npm run clean
 ```
 
 To run the static file server on port 8080:
 
-```
+```bash
 npm run gulp serve
 ```
 
 To run a build and run the static file server on port 8080, concurrently:
 
-```
+```bash
 npm run gulp build serve
 ```
 
