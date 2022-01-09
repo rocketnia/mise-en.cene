@@ -29,7 +29,7 @@ async function runCeneCli(args) {
             .on("close", code => {
                 if (code !== 0)
                     return void reject(
-                        new Error("Cene exited with code " + code));
+                        new Error(`Cene exited with code ${code}`));
                 
                 resolve();
             });
@@ -37,7 +37,7 @@ async function runCeneCli(args) {
 }
 
 async function build(opt_options) {
-    var options = Object.assign({}, {
+    var options = Object.assign({
         minify: true
     }, opt_options);
     
