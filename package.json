@@ -2,11 +2,22 @@
   "name": "mise-en.cene",
   "version": "0.1.0",
   "description": "A parser and compiler for conversations in the visual novel style.",
-  "homepage": "https://github.com/rocketnia/mise-en.cene",
+  "keywords": [
+    "cene"
+  ],
+  "homepage": "https://github.com/rocketnia/mise-en.cene#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rocketnia/mise-en.cene.git"
+  },
+  "bugs": {
+    "url": "https://github.com/rocketnia/mise-en.cene/issues"
+  },
   "author": {
     "name": "Rocketnia",
     "url": "https://www.rocketnia.com/"
   },
+  "license": "MIT",
   "scripts": {
     "cene": "cene",
     "gulp": "gulp",
@@ -17,20 +28,18 @@
     "test": "echo 'No tests. Use `npm run build` to verify that the build works.'",
     "prepare": "npm run build"
   },
-  "devDependencies": {
-    "cene": "0.0.44",
-    "cross-spawn": "^7.0.3",
-    "del": "^6.0.0",
-    "express": "^4.15.2",
-    "gulp": "^4.0.2",
-    "lodash": "^4.17.4",
-    "when": "^3.7.8"
-  },
   "files": [
     "/lib-cene/**",
     "/src/**",
     "/gulpfile.js",
     "/LICENSE.txt",
     "/README.md"
-  ]
+  ],
+  "devDependencies": {
+    "cene": "0.0.44",
+    "cross-spawn": "^7.0.3",
+    "express": "^4.15.2",
+    "fs-extra": "^10.0.0",
+    "gulp": "^4.0.2"
+  }
 }

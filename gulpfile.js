@@ -1,85 +1,75 @@
-var $path = require( "path" );
+"use strict";
 
-var del = require( "del" );
-var express = require( "express" );
-var gulp = require( "gulp" );
-var _ = require( "lodash" );
-var spawn = require( "cross-spawn" );
-var when = require( "when" );
+var $path = require("path");
 
-var packageJson = require( "./package.json" );
+var express = require("express");
+var fse = require("fs-extra");
+var spawn = require("cross-spawn");
+
+var packageJson = require("./package.json");
 
 
 var ceneLibs = [
-    "cene",
-    "mise-en.cene"
+    "cene"
 ];
 var port = 8080;
 
 
 var ownLib = packageJson.name;
 
-if ( !/^[a-z\-.]*$/.test( ownLib ) )
+if (!/^[a-z\-.]*$/.test(ownLib))
     throw new Error();
 
 
-function build( opt_options ) {
-    var options = _.defaults( {}, opt_options, {
-        minify: true
-    } );
-    
-    var npmCommand = "run cene -- build.cene -i build/ -o dist/";
-    if ( options.minify )
-        npmCommand += " -m";
-    
-    return when.all( [
-        gulp.src( "src/**/*" ).pipe( gulp.dest( "build/src" ) ),
-        gulp.src( "lib-cene/**/*" ).pipe(
-            gulp.dest( "build/lib/" + ownLib ) )
-    ].concat(
-        ceneLibs.map( function ( lib ) {
-            return gulp.src(
-                "node_modules/" + lib + "/lib-cene/**/*"
-            ).pipe( gulp.dest( "build/lib/" + lib ) );
-        } )
-    ) ).then( function ( ignored ) {
-        return when.promise( function ( resolve, reject ) {
-            spawn( "npm", npmCommand.split( " " ), {
-                stdio: [ "ignore", "inherit", "inherit" ]
-            } ).on( "close", function ( code ) {
-                if ( code !== 0 )
+async function runCeneCli(args) {
+    await new Promise((resolve, reject) => {
+        spawn("npm", ["run", "cene", "--"].concat(args), {
+            stdio: ["ignore", "inherit", "inherit"]
+        })
+            .on("close", code => {
+                if (code !== 0)
                     return void reject(
-                        new Error(
-                            "Cene exited with code " + code ) );
+                        new Error("Cene exited with code " + code));
                 
-                resolve(
-                    gulp.src( "dist/demo/**/*" ).pipe(
-                        gulp.dest( "dist/gh-pages/demo" ) ) );
-            } );
-        } );
-    } );
+                resolve();
+            });
+    });
 }
 
-gulp.task( "clean", function () {
-    return del( [ "build", "dist" ] );
-} );
+async function build(opt_options) {
+    var options = Object.assign({}, {
+        minify: true
+    }, opt_options);
+    
+    await fse.ensureDir("build/lib/");
+    await fse.copy("src/", "build/src/");
+    await fse.copy("lib-cene/", `build/lib/${ownLib}/`);
+    for (const lib of ceneLibs) {
+        await fse.copy(`node_modules/${lib}/lib-cene/`, `build/lib/${lib}/`);
+    }
+    
+    var ceneCliArgs = "build.cene -i build/ -o dist/";
+    if (options.minify)
+        ceneCliArgs += " -m";
+    await runCeneCli(ceneCliArgs.split(" "));
+    
+    await fse.ensureDir("dist/gh-pages/");
+    await fse.copy("dist/demo/", "dist/gh-pages/demo/");
+}
 
-gulp.task( "build", function () {
-    return build();
-} );
+exports.clean = async () => {
+    await fse.remove("build/");
+    await fse.remove("dist/");
+};
 
-gulp.task( "build-debug", function () {
-    return build( {
-        minify: false
-    } );
-} );
+exports.build = async () => await build();
 
-gulp.task( "serve", function ( then ) {
+exports[ "build-debug" ] = async () => await build({ minify: false });
+
+exports.serve = (cb) => {
     var app = express();
-    app.use(
-        express.static( $path.resolve( __dirname, "dist/demo" ) ) );
-    app.listen( port, function () {
-        console.log(
-            "Serving dist/demo/ at http://localhost:" + port + "/" );
-    } );
-} );
+    app.use(express.static($path.resolve(__dirname, "dist/demo")));
+    app.listen(port, () => {
+        console.log(`Serving dist/demo/ at http://localhost:${port}/`);
+    });
+};
